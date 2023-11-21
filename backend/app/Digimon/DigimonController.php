@@ -4,12 +4,17 @@ namespace App\Digimon;
 
 use App\Digimon\Exceptions\DigimonException;
 use App\Digimon\Models\Digimon;
+use App\Digimon\Models\DigimonInfo;
 use App\Digimon\Models\Pagination;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
+const MIN_PAGE_NUMBER = 1;
+const MIN_PAGE_SIZE = 1;
+const PAGE_NUMBER_OFFSET = 1;
 class DigimonController extends Controller
 {
 
@@ -29,7 +34,7 @@ class DigimonController extends Controller
 
         $pageable = $apiResponse["pageable"];
         $pagination = Pagination::make([
-            "currentPage" => $pageable["currentPage"] + 1,
+            "currentPage" => $pageable["currentPage"] + PAGE_NUMBER_OFFSET,
             "elementsOnPage" => $pageable["elementsOnPage"],
             "totalElements" => $pageable["totalElements"],
             "totalPages" => $pageable["totalPages"],
@@ -43,19 +48,47 @@ class DigimonController extends Controller
         );
     }
 
+    public function getDigimonById(Request $request, $id)
+    {
+        $digimonInfo = $this->fetchDigimonById($id);
+        $digimon = DigimonInfo::make($digimonInfo);
+
+        return $digimon;
+    }
+
     private function fetchDigimons(?int $pageNumber = null, ?int $pageSize = null)
     {
-        if (($pageNumber !== null && $pageNumber < 1) || ($pageSize !== null && $pageSize < 1)) {
-            throw new DigimonException('Datos no encontrada.', 404);
-        }
+        if (($pageNumber !== null && $pageNumber < MIN_PAGE_NUMBER) || ($pageSize !== null && $pageSize < MIN_PAGE_NUMBER))
+            throw new DigimonException('Datos no encontrada.', Response::HTTP_NOT_FOUND);
 
         $apiUrl = env("API_URL") . "?" . http_build_query([
-            'page' => $pageNumber !== null ? ($pageNumber - 1) : $pageNumber,
+            'page' => $pageNumber !== null ? ($pageNumber - PAGE_NUMBER_OFFSET) : $pageNumber,
             'pageSize' => $pageSize
         ]);
 
         $client = new Client();
         $response = $client->get($apiUrl);
+        if ($response->getStatusCode() !== Response::HTTP_OK)
+            throw new DigimonException('Ha ocurrido un error inesperado.', Response::HTTP_BAD_GATEWAY);
+
+        $data = json_decode($response->getBody(), true);
+
+        return $data;
+    }
+
+    private function fetchDigimonById(int $id)
+    {
+        if ($id===null || $id < PAGE_NUMBER_OFFSET) {
+            throw new DigimonException('Digimon no encontrado.', Response::HTTP_NOT_FOUND);
+        }
+
+        $apiUrl = env("API_URL") . "/" . $id;
+
+        $client = new Client();
+        $response = $client->get($apiUrl);
+        if ($response->getStatusCode() !== Response::HTTP_OK)
+            throw new DigimonException('Ha ocurrido un error inesperado.', Response::HTTP_BAD_GATEWAY);
+
         $data = json_decode($response->getBody(), true);
 
         return $data;
@@ -66,11 +99,12 @@ class DigimonController extends Controller
         if ($url === "" || $url === null) {
             return "";
         }
+
         $urlComponents = parse_url($url);
         parse_str($urlComponents['query'], $queryParameters);
         $pageNumber = isset($queryParameters['page']) ? $queryParameters['page'] : null;
 
-        return (int)$pageNumber + 1;
+        return (int)$pageNumber + PAGE_NUMBER_OFFSET;
     }
 
     private function validateParams(Request $request)
@@ -82,7 +116,7 @@ class DigimonController extends Controller
 
         $validator = Validator::make($request->all(), $validationRules);
         if ($validator->fails()) {
-            throw new DigimonException('Parametros inválidos.', 400, $validator->errors());
+            throw new DigimonException('Parametros inválidos.', Response::HTTP_BAD_REQUEST, $validator->errors());
         }
     }
 }

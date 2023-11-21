@@ -26,4 +26,7 @@ Route::prefix('v1')->group(function () {
     //  Get all digmons
     Route::get('digimons', [DigimonController::class, 'getDigimons']);
 
+    // Get Digimon by Id
+    Route::get('digimons/{id}', [DigimonController::class, 'getDigimonById']);
+
 });
