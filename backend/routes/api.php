@@ -1,5 +1,6 @@
 <?php
 
+use App\Digimon\DigimonController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+*/
+
+// Digimons V1 api routes
+Route::prefix('v1')->group(function () {
+    //  Get all digmons
+    Route::get('digimons', [DigimonController::class, 'getDigimons']);
+
 });
