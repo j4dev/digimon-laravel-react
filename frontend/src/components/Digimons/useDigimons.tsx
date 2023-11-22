@@ -12,20 +12,6 @@ const useDigimons = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const buildUrlWithQueryParams = (
-    baseUrl: string,
-    queryParams: Record<string, string>,
-  ): string => {
-    const queryString = Object.keys(queryParams)
-      .map(
-        (key) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`,
-      )
-      .join("&");
-
-    return `${baseUrl}?${queryString}`;
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const token = authHeader();
