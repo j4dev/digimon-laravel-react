@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://example.com/product.schema.json",
+  "title": "DigimonsResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "digimon": {
+      "title": "IDigimon",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "name", "image"]
+    }
+  },
+  "properties": {
+    "digimons": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#/definitions/digimon"
+        }
+      ]
+    },
+    "pagination": {
+      "title": "IPagination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "currentPage": {
+          "type": "integer"
+        },
+        "elementsOnPage": {
+          "type": "integer"
+        },
+        "totalElements": {
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        },
+        "previousPage": {
+          "type": "string"
+        },
+        "nextPage": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currentPage",
+        "elementsOnPage",
+        "totalElements",
+        "totalPages",
+        "previousPage",
+        "nextPage"
+      ]
+    }
+  },
+  "required": ["digimons", "pagination"]
+}
