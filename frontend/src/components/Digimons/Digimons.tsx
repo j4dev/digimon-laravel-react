@@ -3,14 +3,10 @@ import { IDigimon } from "../../types/digimon";
 import DigimonInfo from "./DigimonInfo/DigimonInfo";
 import useDigimons from "./useDigimons";
 import ListSkeleton from "../Skeleton/ListSkeleton";
-import { useState } from "react";
 import style from "./Digimons.style";
 
 const Digimons = () => {
-  const { digimons, isLoading } = useDigimons();
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { digimons, isLoading, handleClose, handleOpen, open } = useDigimons();
 
   return (
     <>

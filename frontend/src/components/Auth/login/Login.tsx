@@ -1,22 +1,10 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Container from "@mui/material/Container";
+import { Avatar, Box, Container, CssBaseline, Grid, Link, TextField } from "@mui/material";
+import useAuth from "../useAuth";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
+const { login, isDisable,isLoading } = useAuth();
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -31,7 +19,7 @@ export default function Login() {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -52,14 +40,24 @@ export default function Login() {
             id="password"
             autoComplete="current-password"
           />
-          <Button
+          <LoadingButton
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isDisable}
+            loading={isLoading}
+            loadingPosition="end"
           >
             Iniciar sesión
-          </Button>
+          </LoadingButton>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="/" variant="body2">
+                Crear una nueva cuenta.
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </Container>

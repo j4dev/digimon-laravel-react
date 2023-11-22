@@ -1,12 +1,16 @@
-import Digimons from "./components/Diigimons/Digimons";
-import Login from "./components/login/Login";
-import Register from "./components/register/Register";
+import Router from "./Router";
+import { AuthProvider } from "react-auth-kit";
 
 function App() {
   return (
-    <>
-      <Login></Login>
-    </>
+    <AuthProvider
+      authType={"cookie"}
+      authName={"_auth"}
+      cookieDomain={window.location.hostname}
+      cookieSecure={false}
+    >
+      <Router></Router>
+    </AuthProvider>
   );
 }
 
