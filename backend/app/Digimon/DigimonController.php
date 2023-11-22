@@ -78,7 +78,7 @@ class DigimonController extends Controller
 
     private function fetchDigimonById(int $id)
     {
-        if ($id===null || $id < PAGE_NUMBER_OFFSET) {
+        if ($id === null || $id < PAGE_NUMBER_OFFSET) {
             throw new DigimonException('Digimon no encontrado.', Response::HTTP_NOT_FOUND);
         }
 
