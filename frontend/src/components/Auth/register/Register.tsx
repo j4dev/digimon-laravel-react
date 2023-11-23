@@ -9,9 +9,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import useAuth from "../useAuth";
 import { LoadingButton } from "@mui/lab";
+import { Chip } from "@mui/material";
 
 export default function Register() {
-  const { register, isDisable, isLoading } = useAuth();
+  const { register, isDisable, isLoading, messageResponse, showSuccess, showError } =
+    useAuth();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -76,6 +78,22 @@ export default function Register() {
           >
             Registrarme
           </LoadingButton>
+          {(showSuccess && !showError) && (
+            <Chip
+              label={messageResponse}
+              color="success"
+              disabled={false}
+              variant="filled"
+            />
+          )}
+                    {(showError && !showSuccess) && (
+            <Chip
+              label={messageResponse}
+              color="error"
+              disabled={false}
+              variant="filled"
+            />
+          )}
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="/login" variant="body2">

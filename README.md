@@ -68,11 +68,3 @@ La base de datos está desplegada en AWS. Asegúrese de tener las credenciales y
 
 ## Servidor de Correos 📧
 Como servidor de correos, se está utilizando el SMTP de Gmail. Asegúrese de configurar las variables MAIL_* en el archivo .env del backend con los valores correspondientes.
-
-## Contribución 🤝
-
-Información sobre cómo contribuir al proyecto.
-
-## Licencia 📄
-
-Este proyecto está bajo la Licencia [Nombre de la Licencia]. Ver el archivo `LICENSE` para más detalles.

@@ -8,6 +8,9 @@ import { useAuthHeader } from "react-auth-kit";
 const useAuth = () => {
   const [disable, setDisable] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [messageResponse,setMessageResponse] = useState("");
+  const [showSuccess,setShowSuccess] = useState<boolean>(false); 
+  const [showError,setShowError] = useState<boolean>(false);
   const signOut = useSignOut()
   const authHeader = useAuthHeader();
   const token = authHeader();
@@ -28,13 +31,18 @@ const useAuth = () => {
 
       if (response.ok) {
         const responseData: IUserResponse = await response.json();
+        setMessageResponse(`${responseData.message}. Ya puede iniciar sesión. 👇`);
+        setShowSuccess(true);
+        setShowError(false);
         setDisable(false);
         setLoading(false);
-        alert(responseData.message);
       } else {
+        const responseData: IUserResponse = await response.json();
+        setMessageResponse(`${responseData.details?.email[0]} Valida los datos.`);
+        setShowError(true);
+        setShowSuccess(false);
         setDisable(false);
         setLoading(false);
-        alert("No se pudo crear el usuario");
       }
     } catch {
       console.error("No se pudo crear el usuario");
@@ -106,6 +114,9 @@ const useAuth = () => {
     login,
     logOut,
     register,
+    messageResponse,
+    showSuccess,
+    showError,
     isDisable: disable,
     isLoading: loading,
   };
