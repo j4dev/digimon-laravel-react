@@ -12,8 +12,6 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        var_dump(env("LOGIN_URL"));
-        //return $request->expectsJson() ? null : env("LOGIN_URL");
-        return $request->expectsJson() ? null : "https://front-uta4.onrender.com";
+        return $request->expectsJson() ? null : "https://digimon-front.onrender.com/login";
     }
 }
