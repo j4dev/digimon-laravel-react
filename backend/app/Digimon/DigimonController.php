@@ -15,9 +15,78 @@ use Illuminate\Support\Facades\Validator;
 const MIN_PAGE_NUMBER = 1;
 const MIN_PAGE_SIZE = 1;
 const PAGE_NUMBER_OFFSET = 1;
+
+/**
+ * @OA\Tag(
+ *     name="Digimon",
+ *     description="Digimon api wrapper",
+ * )
+ */
 class DigimonController extends Controller
 {
-
+    /**
+     * @OA\Get(
+     *   path="/api/v1/digimons",
+     *   operationId="getDigimons",
+     *      tags={"Digimon"},
+     *   @OA\Parameter(
+     *      in="query",
+     *      name="page",
+     *      description="Numero de página.",
+     *      required=false,
+     *      @OA\Schema(
+     *           type="number"
+     *       )
+     *     ),
+     *   @OA\Parameter(
+     *      in="query",
+     *      name="pageSize",
+     *      description="Elemento por página.",
+     *      required=false,
+     *      @OA\Schema(
+     *           type="number"
+     *       )
+     *     ),
+     *   @OA\Response(
+     *     response=200,
+     *     @OA\JsonContent(
+     *          @OA\Property(
+     *              property="digimons",
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/Digimon")
+     *          ),
+     *          @OA\Property(
+     *              property="pagination",
+     *              ref="#/components/schemas/Pagination"
+     *          ),
+     *     ),
+     *     description="Retorna lista de digimons"),
+     *     security={{ "apiAuth": {} }},
+     *     summary="Listado de digimons",
+     *     description="Retorna toda la lista de digimons",
+     *      @OA\Response(
+     *          response=404,
+     *          description="Datos no encontrada.",
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Parametros inválidos.",
+     *      ),
+     *      @OA\Response(
+     *          response=502,
+     *          description="Ha ocurrido un error inesperado."
+     *      ),
+     *      @OA\SecurityScheme(
+     *          type="apiKey",
+     *          name="Authorization",
+     *          in="header",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *          securityScheme="apiAuth",
+     *          description="Token de autenticación (Bearer token)"
+     *      )
+     *   )
+     */
     public function getDigimons(Request $request)
     {
         $this->validateParams($request);
@@ -48,6 +117,49 @@ class DigimonController extends Controller
         );
     }
 
+    /**
+     * @OA\Get(
+     *   path="/api/v1/digimons/{id}",
+     *   operationId="getDigimonById",
+     *      tags={"Digimon"},
+     *   @OA\Parameter(
+     *      in="path",
+     *      name="id",
+     *      description="Id del digimon.",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="number"
+     *       )
+     *     ),
+     *   @OA\Response(
+     *     response=200,
+     *     @OA\JsonContent(
+     *         type="array",
+     *         @OA\Items(ref="#/components/schemas/DigimonInfo")
+     *     ),
+     *     description="Retorna información del digimon"),
+     *     security={{ "apiAuth": {} }},
+     *     summary="Listado de digimons",
+     *     description="Retorna digimon info",
+     *      @OA\Response(
+     *          response=404,
+     *          description="Datos no encontrada.",
+     *      ),
+     *      @OA\Response(
+     *          response=502,
+     *          description="Ha ocurrido un error inesperado."
+     *      ),
+     *      @OA\SecurityScheme(
+     *          type="apiKey",
+     *          name="Authorization",
+     *          in="header",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *          securityScheme="apiAuth",
+     *          description="Token de autenticación (Bearer token)"
+     *      )
+     *   )
+     */
     public function getDigimonById(Request $request, $id)
     {
         $digimonInfo = $this->fetchDigimonById($id);

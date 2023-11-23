@@ -14,7 +14,22 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-
+        /**
+    * @OA\Get(
+    *     path="/api/location",
+    *     operationId="getProjectsList",
+    *     summary="Mostrar las localidades",
+    *     tags={"Localidad"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos las localidades."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     public function register(Request $request)
     {
 
