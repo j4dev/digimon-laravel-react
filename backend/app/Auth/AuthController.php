@@ -5,6 +5,7 @@ namespace App\Auth;
 use App\Auth\Models\User;
 use App\Digimon\Exceptions\DigimonException;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -20,16 +21,17 @@ class AuthController extends Controller
         $validationRules = [
             "name" => "required",
             "email" => "required|email|unique:users",
-            "password" => "required|confirmed"
+            "password" => "required"
         ];
         $this->validateRequest($request, $validationRules);
 
-        User::create([
+        $user = User::create([
             "name" => $request->name,
             "email" => $request->email,
             "password" => Hash::make($request->password)
         ]);
 
+        event(new Registered($user));
         return response()->json([
             "message" => "Usuario registrado correctamente"
         ], Response::HTTP_CREATED);

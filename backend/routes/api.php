@@ -2,6 +2,7 @@
 
 use App\Auth\AuthController;
 use App\Digimon\DigimonController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,24 +24,46 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 
 // Digimons V1 api routes
-Route::prefix('v1')->group(function () {
+Route::group([
+    "middleware" => ["auth:api"],
+    "prefix" => "v1",
+], function () {
     //  Get all digmons
     Route::get('digimons', [DigimonController::class, 'getDigimons']);
 
     // Get Digimon by Id
     Route::get('digimons/{id}', [DigimonController::class, 'getDigimonById']);
 
+    Route::get("user/profile", [AuthController::class, "profile"]);
+    Route::get("user/refresh", [AuthController::class, "refreshToken"]);
+    Route::get("user/logout", [AuthController::class, "logout"]);
+});
+
+
+Route::group([
+    "prefix" => "v1",
+], function () {
+
     // Users operations
     Route::post("user/register", [AuthController::class, "register"]);
     Route::post("user/login", [AuthController::class, "login"]);
 });
 
-Route::group([
-    "middleware" => ["auth:api"],
-    "prefix" => "v1/user",
-], function () {
+// Email routing
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
 
-    Route::get("profile", [AuthController::class, "profile"]);
-    Route::get("refresh", [AuthController::class, "refreshToken"]);
-    Route::get("logout", [AuthController::class, "logout"]);
-});
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
