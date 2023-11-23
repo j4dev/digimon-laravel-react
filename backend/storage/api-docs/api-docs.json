@@ -1,0 +1,271 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Digimon API",
+        "description": "Documentacion de la API wrapper de digimon",
+        "license": {
+            "name": "Apache 3.2.4",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://digimon-api-x8ni.onrender.com/",
+            "description": "Digimon API"
+        }
+    ],
+    "paths": {
+        "/api/v1/digimons": {
+            "get": {
+                "tags": [
+                    "Digimon"
+                ],
+                "summary": "Listado de digimons",
+                "description": "Retorna toda la lista de digimons",
+                "operationId": "getDigimons",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numero de página.",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "description": "Elemento por página.",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna lista de digimons",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "digimons": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Digimon"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#/components/schemas/Pagination"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Datos no encontrada."
+                    },
+                    "400": {
+                        "description": "Parametros inválidos."
+                    },
+                    "502": {
+                        "description": "Ha ocurrido un error inesperado."
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/digimons/{id}": {
+            "get": {
+                "tags": [
+                    "Digimon"
+                ],
+                "summary": "Listado de digimons",
+                "description": "Retorna digimon info",
+                "operationId": "getDigimonById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id del digimon.",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna información del digimon",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DigimonInfo"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Datos no encontrada."
+                    },
+                    "502": {
+                        "description": "Ha ocurrido un error inesperado."
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Digimon": {
+                "title": "digimon",
+                "description": "Class Digimon list",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "DigimonInfo": {
+                "title": "digimon_info",
+                "description": "Class Digimon Info",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "href": {
+                                    "type": "string"
+                                },
+                                "transparent": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "levels": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                },
+                                "level": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "types": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                },
+                                "type": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "attributes": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                },
+                                "attribute": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "fields": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                },
+                                "field": {
+                                    "type": "string"
+                                },
+                                "image": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Pagination": {
+                "title": "pagination",
+                "description": "Class Digimon list",
+                "properties": {
+                    "currentPage": {
+                        "type": "number"
+                    },
+                    "elementsOnPage": {
+                        "type": "number"
+                    },
+                    "totalElements": {
+                        "type": "number"
+                    },
+                    "totalPages": {
+                        "type": "number"
+                    },
+                    "previousPage": {
+                        "type": "number"
+                    },
+                    "nextPage": {
+                        "type": "number"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Digimon",
+            "description": "Digimon api wrapper"
+        }
+    ]
+}
