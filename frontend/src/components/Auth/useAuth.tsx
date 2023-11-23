@@ -28,6 +28,8 @@ const useAuth = () => {
         setLoading(false);
         alert(responseData.message);
       } else {
+        setDisable(false);
+        setLoading(false);
         alert("No se pudo crear el usuario");
       }
     } catch {
@@ -59,6 +61,8 @@ const useAuth = () => {
         setLoading(false);
         navigate("/digimons");
       } else {
+        setDisable(false);
+        setLoading(false);
         alert("No se pudo iniciar sesion");
       }
     } catch {

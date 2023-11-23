@@ -9,4 +9,10 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-export default style;
+const textCenter ={
+  
+    display: "flex",
+    justifyContent: "center",
+
+}
+export{style,textCenter  };

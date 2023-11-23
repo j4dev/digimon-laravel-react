@@ -1,56 +1,60 @@
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { IDigimon } from "../../types/digimon";
 import DigimonInfo from "./DigimonInfo/DigimonInfo";
 import useDigimons from "./useDigimons";
 import ListSkeleton from "../Skeleton/ListSkeleton";
-import style from "./Digimons.style";
+import ModalInfo from "./DigimonInfo/ModalInfo";
 
 const Digimons = () => {
-  const { digimons, isLoading, handleClose, handleOpen, open } = useDigimons();
+  const {
+    digimons,
+    isLoading,
+    handleClose,
+    handleOpen,
+    open,
+    digimonInfo,
+    isModalLoading,
+  } = useDigimons();
 
   return (
     <>
-      <Modal
+      <ModalInfo
+        digimonInfo={digimonInfo!}
         open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal>
+        handleClose={handleClose}
+        loading={isModalLoading}
+      />
 
       <Box>
         <Typography
           sx={{
             textAlign: "center",
+            marginBottom: 3,
           }}
           variant="h5"
         >
           Digimons List
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "grid",
-          gap: 2,
-          gridTemplateColumns: "repeat(auto-fill,minmax(15rem,1fr))",
-        }}
-      >
-        {isLoading ? (
-          <ListSkeleton />
-        ) : (
-          digimons.map((digimon: IDigimon) => (
-            <DigimonInfo digimon={digimon} onClick={handleOpen} />
-          ))
-        )}
-      </Box>
+      {isLoading ? (
+        <ListSkeleton />
+      ) : (
+        <Box
+          sx={{
+            display: "grid",
+            gap: 2,
+            gridTemplateColumns: "repeat(auto-fill,minmax(15rem,1fr))",
+          }}
+        >
+          {digimons.map((digimon: IDigimon) => (
+            <DigimonInfo
+              key={digimon.id}
+              digimon={digimon}
+              onClick={() => handleOpen(digimon.id)}
+            />
+          ))}
+        </Box>
+      )}
     </>
   );
 };

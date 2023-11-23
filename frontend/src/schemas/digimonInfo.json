@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "DigimonInfoResponse",
+  "additionalProperties": false,
+  "definitions": {
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "field": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "field",
+        "image"
+      ]
+    },
+    "attribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "attribute": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "attribute"
+      ]
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "transparent": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "href",
+        "transparent"
+      ]
+    },
+    "level": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "level": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "level"
+      ]
+    },
+    "type": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ]
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "images": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#/definitions/image"
+        }
+      ]
+    },
+    "levels": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#/definitions/level"
+        }
+      ]
+    },
+    "types": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#/definitions/type"
+        }
+      ]
+    },
+    "attributes": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#/definitions/attribute"
+        }
+      ]
+    },
+    "fields": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#/definitions/field"
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "images",
+    "levels",
+    "types",
+    "attributes",
+    "fields"
+  ]
+}

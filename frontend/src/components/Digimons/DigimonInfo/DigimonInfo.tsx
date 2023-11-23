@@ -5,7 +5,6 @@ import { Box, CardActionArea } from "@mui/material";
 import { DigimonInfoProps } from "./DigimonInfo.interface";
 
 const DigimonInfo = (props: DigimonInfoProps) => {
-  
   return (
     <Card sx={{ width: 200 }}>
       <CardActionArea onClick={props.onClick}>
