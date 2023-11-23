@@ -29,11 +29,12 @@ MAIL_ENCRYPTION=ssl
 
 Siga estos pasos para instalar el proyecto:
 
-1. Clonar el repositorio: `https://github.com/j4dev/digimon-laravel-react`
-2. Instalar dependencias: [Descargar Composer](https://getcomposer.org/download/) y luego ejecutar `composer install`
-3. Configurar el archivo `.env` con la información de la base de datos y otras configuraciones necesarias todas las variables necesarias ya se encuentan en el archivo env.example.
-4. Ejecutar migraciones: `php artisan migrate`
-5. Ejecutar el servidor: `php artisan serve`
+1. Navegue a la carpeta `backend`: `cd backend`
+2. Clonar el repositorio: `https://github.com/j4dev/digimon-laravel-react`
+3. Instalar dependencias: [Descargar Composer](https://getcomposer.org/download/) y luego ejecutar `composer install`
+4. Configurar el archivo `.env` con la información de la base de datos y otras configuraciones necesarias todas las variables necesarias ya se encuentan en el archivo env.example.
+5. Ejecutar migraciones: `php artisan migrate`
+6. Ejecutar el servidor: `php artisan serve`
 
 ### Despliegue ☁️
 
