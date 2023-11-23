@@ -16,6 +16,132 @@
         }
     ],
     "paths": {
+        "/api/v1/user/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Registrar un nuevo usuario",
+                "operationId": "register",
+                "requestBody": {
+                    "description": "Información de usuario.",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario registrado correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario registrado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parametros inválidos."
+                    }
+                }
+            }
+        },
+        "/api/v1/user/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login con credenciales existentes",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "User login information",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "required": [
+                                            "email"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "required": [
+                                            "password"
+                                        ],
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario logeado correctamente"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAi......."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No se pudo iniciar sesión."
+                    }
+                }
+            }
+        },
+        "/api/v1/user/logout": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout usuario",
+                "operationId": "logout",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "JWT para verificación de usiaro",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer {token}"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Se ha cerrado sesión correctamente"
+                    }
+                }
+            }
+        },
         "/api/v1/digimons": {
             "get": {
                 "tags": [
@@ -25,6 +151,16 @@
                 "description": "Retorna toda la lista de digimons",
                 "operationId": "getDigimons",
                 "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "JWT para verificación de usiaro",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer {token}"
+                        }
+                    },
                     {
                         "name": "page",
                         "in": "query",
@@ -93,6 +229,16 @@
                 "operationId": "getDigimonById",
                 "parameters": [
                     {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "JWT para verificación de usiaro",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer {token}"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "description": "Id del digimon.",
@@ -133,6 +279,31 @@
     },
     "components": {
         "schemas": {
+            "User": {
+                "title": "user",
+                "description": "Class User",
+                "properties": {
+                    "name": {
+                        "required": [
+                            "name"
+                        ],
+                        "type": "string"
+                    },
+                    "email": {
+                        "required": [
+                            "email"
+                        ],
+                        "type": "string"
+                    },
+                    "password": {
+                        "required": [
+                            "password"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "Digimon": {
                 "title": "digimon",
                 "description": "Class Digimon list",
@@ -260,9 +431,23 @@
                 },
                 "type": "object"
             }
+        },
+        "securitySchemes": {
+            "apiAuth": {
+                "type": "http",
+                "description": "JWT Token",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
         }
     },
     "tags": [
+        {
+            "name": "Authentication",
+            "description": "Auth para usuarios por api"
+        },
         {
             "name": "Digimon",
             "description": "Digimon api wrapper"

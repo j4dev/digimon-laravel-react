@@ -29,6 +29,16 @@ class DigimonController extends Controller
      *   path="/api/v1/digimons",
      *   operationId="getDigimons",
      *      tags={"Digimon"},
+     *     @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string",
+     *             format="Bearer {token}",
+     *         ),
+     *         description="JWT para verificación de usiaro",
+     *     ),
      *   @OA\Parameter(
      *      in="query",
      *      name="page",
@@ -75,15 +85,6 @@ class DigimonController extends Controller
      *      @OA\Response(
      *          response=502,
      *          description="Ha ocurrido un error inesperado."
-     *      ),
-     *      @OA\SecurityScheme(
-     *          type="apiKey",
-     *          name="Authorization",
-     *          in="header",
-     *          scheme="bearer",
-     *          bearerFormat="JWT",
-     *          securityScheme="apiAuth",
-     *          description="Token de autenticación (Bearer token)"
      *      )
      *   )
      */
@@ -122,6 +123,16 @@ class DigimonController extends Controller
      *   path="/api/v1/digimons/{id}",
      *   operationId="getDigimonById",
      *      tags={"Digimon"},
+     *      @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string",
+     *             format="Bearer {token}",
+     *         ),
+     *         description="JWT para verificación de usiaro",
+     *     ),
      *   @OA\Parameter(
      *      in="path",
      *      name="id",

@@ -12,8 +12,41 @@ use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @OA\Tag(
+ *     name="Authentication",
+ *     description="Auth para usuarios por api",
+ * )
+ */
 class AuthController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/v1/user/register",
+     *     operationId="register",
+     *     tags={"Authentication"},
+     *     summary="Registrar un nuevo usuario",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Información de usuario.",
+     *          @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/User")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Usuario registrado correctamente",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Usuario registrado correctamente")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Parametros inválidos.",
+     *     ),
+     * )
+     */
     public function register(Request $request)
     {
 
@@ -36,6 +69,37 @@ class AuthController extends Controller
         ], Response::HTTP_CREATED);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/user/login",
+     *     operationId="login",
+     *     tags={"Authentication"},
+     *     summary="Login con credenciales existentes",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User login information",
+     *          @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                @OA\Property(property="email", type="string", required={"email"}),
+     *                @OA\Property(property="password", type="string", required={"password"})
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User logged in successfully",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Usuario logeado correctamente"),
+     *              @OA\Property(property="token", type="string", example="eyJ0eXAi.......")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No se pudo iniciar sesión.",
+     *     ),
+     * )
+     */
     public function login(Request $request)
     {
 
@@ -78,6 +142,37 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/user/logout",
+     *     operationId="logout",
+     *     tags={"Authentication"},
+     *     summary="Logout usuario",
+     *      @OA\Parameter(
+     *         name="Authorization",
+     *         in="header",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string",
+     *             format="Bearer {token}",
+     *         ),
+     *         description="JWT para verificación de usiaro",
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Se ha cerrado sesión correctamente",
+     *     ),
+     * )
+     *   @OA\SecurityScheme(
+     *     type="http",
+     *     name="Authorization",
+     *     description="JWT Token",
+     *     in="header",
+     *     scheme="bearer",
+     *     bearerFormat="JWT",
+     *     securityScheme="apiAuth",
+     * )
+     */
     public function logout()
     {
 

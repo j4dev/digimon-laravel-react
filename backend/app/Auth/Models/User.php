@@ -11,14 +11,32 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * Class User
+ * @OA\Schema(
+ *     title="user",
+ * )
+ */
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     *@OA\Property(
+     *       property="name",
+     *       type="string",
+     *       required={"name"}
+     *   ),
+     *@OA\Property(
+     *       property="email",
+     *       type="string",
+     *       required={"email"}
+     *   ),
+     *@OA\Property(
+     *       property="password",
+     *       type="string",
+     *      required={"password"}
+     *   ),
      */
     protected $fillable = [
         'name',
