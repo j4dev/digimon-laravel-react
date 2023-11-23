@@ -1,4 +1,4 @@
-import { Box, Grid, Link, Pagination, Typography } from "@mui/material";
+import { Box, Grid, Pagination, Typography } from "@mui/material";
 import { IDigimon } from "../../types/digimon";
 import DigimonInfo from "./DigimonInfo/DigimonInfo";
 import useDigimons from "./useDigimons";
