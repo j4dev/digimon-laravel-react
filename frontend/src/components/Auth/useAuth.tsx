@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { API } from "../../config/Apis";
 import IUserResponse from "./Auth.interface";
-import { useSignIn } from "react-auth-kit";
+import { useSignIn, useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
+import { useAuthHeader } from "react-auth-kit";
 
 const useAuth = () => {
   const [disable, setDisable] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const signOut = useSignOut()
+  const authHeader = useAuthHeader();
+  const token = authHeader();
   const signIn = useSignIn();
   const navigate = useNavigate();
 
@@ -17,7 +21,7 @@ const useAuth = () => {
     const data = new FormData(event.currentTarget);
 
     try {
-      const response = await fetch(API.USERS_API + "/register", {
+      const response = await fetch(`${API.USERS_API}/register`, {
         method: "POST",
         body: data,
       });
@@ -33,7 +37,7 @@ const useAuth = () => {
         alert("No se pudo crear el usuario");
       }
     } catch {
-      console.error("Error during registration");
+      console.error("No se pudo crear el usuario");
     }
   };
 
@@ -44,7 +48,7 @@ const useAuth = () => {
     const data = new FormData(event.currentTarget);
 
     try {
-      const response = await fetch(API.USERS_API + "/login", {
+      const response = await fetch(`${API.USERS_API}/login`, {
         method: "POST",
         body: data,
       });
@@ -66,12 +70,41 @@ const useAuth = () => {
         alert("No se pudo iniciar sesion");
       }
     } catch {
-      console.error("Error during registration");
+      console.error("No se pudo iniciar sesión. Intentelo mas tarde.");
     }
   };
 
+  const logOut = async(event: React.FormEvent<HTMLFormElement>) =>{
+    setDisable(true);
+    setLoading(true);
+    event.preventDefault();
+
+    try {
+      const response = await fetch(`${API.USERS_API}/logout`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.ok) {
+        signOut();
+        setDisable(false);
+        setLoading(false);
+        navigate("/login");
+      } else {
+        setDisable(false);
+        setLoading(false);
+        alert("No se pudo iniciar sesion");
+      }
+    } catch {
+      console.error("No se pudo cerrar sesión correctamente");
+    }
+  }
+
   return {
     login,
+    logOut,
     register,
     isDisable: disable,
     isLoading: loading,
